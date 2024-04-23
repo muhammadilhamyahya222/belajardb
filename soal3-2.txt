@@ -1,0 +1,77 @@
+// No 1
+MariaDB [db_pos]> SELECT COUNT(*) AS jumlah_pelanggan_1998 FROM pelanggan
+    -> WHERE YEAR(tgl_lahir) = 1998;
++-----------------------+
+| jumlah_pelanggan_1998 |
++-----------------------+
+|                     0 |
++-----------------------+
+1 row in set (0.106 sec)
+
+// No 2
+MariaDB [db_pos]> SELECT COUNT(*) AS jumlah_pelanggan_perempuan_lahir_jakarta FROM pelanggan
+    -> WHERE jk = 'perempuan' AND tmp_lahir = 'Jakarta';
++------------------------------------------+
+| jumlah_pelanggan_perempuan_lahir_jakarta |
++------------------------------------------+
+|                                        0 |
++------------------------------------------+
+1 row in set (0.001 sec)
+
+// No 3
+MariaDB [db_pos]> SELECT SUM(stok) AS total_stok_produk_harga_dibawah_10rb FROM produk
+    -> WHERE harga_jual < 10000;
++--------------------------------------+
+| total_stok_produk_harga_dibawah_10rb |
++--------------------------------------+
+|                                   79 |
++--------------------------------------+
+1 row in set (0.001 sec)
+
+// No 4
+MariaDB [db_pos]> SELECT COUNT(*) AS jumlah_produk_kode_awal_K FROM produk
+    -> WHERE kode LIKE 'K%';
++---------------------------+
+| jumlah_produk_kode_awal_K |
++---------------------------+
+|                         1 |
++---------------------------+
+1 row in set (0.265 sec)
+
+// No 5
+MariaDB [db_pos]> SELECT AVG(harga_jual) AS harga_jual_rata_rata_produk_diatas_1jt FROM produk
+    -> WHERE harga_jual > 1000000;
++----------------------------------------+
+| harga_jual_rata_rata_produk_diatas_1jt |
++----------------------------------------+
+|                     31387733.333333332 |
++----------------------------------------+
+1 row in set (0.001 sec)
+
+// No 6
+MariaDB [db_pos]> SELECT MAX(stok) AS jumlah_stok_terbesar FROM produk;
++----------------------+
+| jumlah_stok_terbesar |
++----------------------+
+|                   53 |
++----------------------+
+1 row in set (0.001 sec)
+
+// No 7
+MariaDB [db_pos]> SELECT COUNT(*) AS jumlah_produk_stok_kurang_dari_minimal_stok FROM produk
+    -> WHERE stok < min_stok;
++---------------------------------------------+
+| jumlah_produk_stok_kurang_dari_minimal_stok |
++---------------------------------------------+
+|                                           4 |
++---------------------------------------------+
+1 row in set (0.001 sec)
+
+// No 8
+MariaDB [db_pos]> SELECT SUM(harga_beli * stok) AS total_asset FROM produk;
++-------------+
+| total_asset |
++-------------+
+|   480504000 |
++-------------+
+1 row in set (0.001 sec)

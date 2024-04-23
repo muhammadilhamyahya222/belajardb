@@ -1,0 +1,106 @@
+// No 1
+MariaDB [db_pos]> SELECT tmp_lahir, COUNT(*) AS jumlah_tempat_lahir_pelanggan FROM pelanggan
+    -> GROUP BY tmp_lahir;
++------------+-------------------------------+
+| tmp_lahir  | jumlah_tempat_lahir_pelanggan |
++------------+-------------------------------+
+| Belfast    |                             1 |
+| Jakarta    |                             3 |
+| Kediri     |                             2 |
+| Pati       |                             1 |
+| Solo       |                             1 |
+| Surabaya   |                             2 |
+| Tangerang  |                             1 |
+| Yogyakarta |                             1 |
++------------+-------------------------------+
+8 rows in set (0.001 sec)
+
+// No 2
+MariaDB [db_pos]> SELECT jenis_produk.nama AS jenis_produk, COUNT(produk.id) AS jumlah_produk FROM produk produk
+    -> JOIN jenis_produk jenis_produk ON produk.jenis_produk_id = jenis_produk.id
+    -> GROUP BY jenis_produk.nama;
++--------------+---------------+
+| jenis_produk | jumlah_produk |
++--------------+---------------+
+| elektroniks  |            13 |
+| furniture    |             1 |
+| komputer     |             3 |
+| minuman      |             5 |
++--------------+---------------+
+4 rows in set (0.001 sec)
+
+// No 3
+MariaDB [db_pos]> SELECT id, nama, tgl_lahir FROM pelanggan
+    -> WHERE YEAR(NOW()) - YEAR(tgl_lahir) < (SELECT AVG(YEAR(NOW()) - YEAR(tgl_lahir)) FROM pelanggan);
++----+--------------------+------------+
+| id | nama               | tgl_lahir  |
++----+--------------------+------------+
+|  1 | Agung Sedayu Group | 2010-01-01 |
+|  9 | Ahmad Hasan        | 1992-10-15 |
+| 11 | Andi Wijaya        | 2023-11-07 |
+| 12 | Ira                | 2023-11-07 |
++----+--------------------+------------+
+4 rows in set (0.002 sec)
+
+// No 4
+MariaDB [db_pos]> SELECT id, nama, harga_jual FROM produk
+    -> WHERE harga_jual > (SELECT AVG(harga_jual) FROM produk);
++----+-------------------+------------+
+| id | nama              | harga_jual |
++----+-------------------+------------+
+|  1 | Televisi 21 inchs |   50500000 |
+| 19 | Televisi 22 inc`  |   50500000 |
+| 20 | Televisi 23 inc   |   50500000 |
+| 21 | Televisi 24 inc   |   50500000 |
+| 22 | Televisi 25 inc   |   50500000 |
+| 24 | Televisi 27 inc   |   50500000 |
+| 25 | Televisi 28 inc   |   50500000 |
+| 26 | Televisi 29 inc   |   50500000 |
++----+-------------------+------------+
+8 rows in set (0.001 sec)
+
+// No 5
+MariaDB [db_pos]> SELECT kartu.iuran AS iuran, pelanggan.* FROM pelanggan pelanggan
+    -> JOIN kartu kartu ON pelanggan.kartu_id = kartu.id
+    -> WHERE kartu.iuran > 90000;
++--------+----+-------+--------------------+----+------------+------------+-------------------+----------+
+| iuran  | id | kode  | nama               | jk | tmp_lahir  | tgl_lahir  | email             | kartu_id |
++--------+----+-------+--------------------+----+------------+------------+-------------------+----------+
+| 100000 |  1 | C001  | Agung Sedayu Group | L  | Solo       | 2010-01-01 | sedayu@gmail.com  |        1 |
+| 150000 |  2 | C002  | Pandan Wangi       | P  | Yogyakarta | 1950-01-01 | wangi@gmail.com   |        2 |
+| 100000 |  3 | C003  | Sekar Mirah        | P  | Kediri     | 1983-02-20 | mirah@yahoo.com   |        1 |
+| 150000 |  5 | C005  | Pradabashu         | L  | Pati       | 1985-04-02 | prada85@gmail.com |        2 |
+| 100000 |  6 | C006  | Gayatri Dwi        | P  | Jakarta    | 1987-11-28 | gaya87@gmail.com  |        1 |
+| 100000 |  7 | C007  | Dewi Gyat          | P  | Jakarta    | 1988-12-01 | giyat@gmail.com   |        1 |
+| 100000 | 10 | C010  | Cassanndra         | P  | Belfast    | 1990-11-20 | casa90@gmail.com  |        1 |
+| 150000 | 11 | K0010 | Andi Wijaya        | L  | Tangerang  | 2023-11-07 | andi@gmail.com    |        2 |
++--------+----+-------+--------------------+----+------------+------------+-------------------+----------+
+8 rows in set (0.001 sec)
+
+// No 6
+MariaDB [db_pos]> SELECT COUNT(*) AS jumlah_produk, AVG(harga_jual) AS rata_rata_harga_produk FROM produk
+    -> WHERE harga_jual < (SELECT AVG(harga_jual) FROM produk);
++---------------+------------------------+
+| jumlah_produk | rata_rata_harga_produk |
++---------------+------------------------+
+|            14 |      4819785.714285715 |
++---------------+------------------------+
+1 row in set (0.001 sec)
+
+// No 7
+MariaDB [db_pos]> SELECT kartu.diskon AS diskon_kartu, pelanggan.* FROM pelanggan pelanggan
+    -> JOIN kartu kartu ON pelanggan.kartu_id = kartu.id
+    -> WHERE diskon > 0.03;
++--------------+----+-------+--------------------+----+------------+------------+-------------------+----------+
+| diskon_kartu | id | kode  | nama               | jk | tmp_lahir  | tgl_lahir  | email             | kartu_id |
++--------------+----+-------+--------------------+----+------------+------------+-------------------+----------+
+|         0.05 |  1 | C001  | Agung Sedayu Group | L  | Solo       | 2010-01-01 | sedayu@gmail.com  |        1 |
+|          0.1 |  2 | C002  | Pandan Wangi       | P  | Yogyakarta | 1950-01-01 | wangi@gmail.com   |        2 |
+|         0.05 |  3 | C003  | Sekar Mirah        | P  | Kediri     | 1983-02-20 | mirah@yahoo.com   |        1 |
+|          0.1 |  5 | C005  | Pradabashu         | L  | Pati       | 1985-04-02 | prada85@gmail.com |        2 |
+|         0.05 |  6 | C006  | Gayatri Dwi        | P  | Jakarta    | 1987-11-28 | gaya87@gmail.com  |        1 |
+|         0.05 |  7 | C007  | Dewi Gyat          | P  | Jakarta    | 1988-12-01 | giyat@gmail.com   |        1 |
+|         0.05 | 10 | C010  | Cassanndra         | P  | Belfast    | 1990-11-20 | casa90@gmail.com  |        1 |
+|          0.1 | 11 | K0010 | Andi Wijaya        | L  | Tangerang  | 2023-11-07 | andi@gmail.com    |        2 |
++--------------+----+-------+--------------------+----+------------+------------+-------------------+----------+
+8 rows in set (0.001 sec)
